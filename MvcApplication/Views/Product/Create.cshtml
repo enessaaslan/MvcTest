@@ -1,0 +1,36 @@
+﻿@model Product
+<h1>Ürün Oluştur</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" asp-controller="Product" method="post">
+            <div class="form-group">
+                <label asp-for="ProductName" class="control-label"></label>
+                <input asp-for="ProductName" class="form-control"/>
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control"/>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Kategori</label>
+                <select asp-for="PhoneId" class="form-select">
+                    <option value="0" selected disabled>Kategoriler</option>
+                    <option value="1">Samsung</option>
+                    <option value="2">Apple</option>
+                    <option value="3">Xiaomi</option>
+                    <option value="4">Huawei</option>
+                </select>
+                <span asp-validation-for="PhoneCategory" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Oluştur" class="btn btn-primary mt-2" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-sm btn-info mt-3">Anasayfaya Dön</a>
+</div>

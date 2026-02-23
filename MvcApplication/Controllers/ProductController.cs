@@ -35,14 +35,14 @@ namespace MvcApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Product product)
         {
-            var query = "insert into Products (ProductName,Price,ProductDescription,PhoneId) values(@Name,@Price,@Description,@PhoneId)";
+            var query = "insert into Products (ProductName,Price,ProductDescription,PhoneId) values(@ProductName,@Price,@ProductDescription,@PhoneId)";
             using (var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, product);
                 return RedirectToAction("Index");
             }
         }
-
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var query = "select * from Products where ProductId=@Id";
@@ -58,11 +58,42 @@ namespace MvcApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Product product)
         {
-            var query = "update Products set ProductName=@Name,Price=@Price,ProductDescription=@Description,CategoryId=@CategoryId where ProductId=@Id";
+            var query = "update Products set ProductName=@Name,Price=@Price,ProductDescription=@Description,PhoneId=@PhoneId where ProductId=@Id";
             using (var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, product);
                 return RedirectToAction("Index");
+            }
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var query = "Select * from Products where ProductId=@Id";
+            using (var connection = _context.CreateConnection())
+            {
+                var product = await connection.QuerySingleOrDefaultAsync<Product>(query, new { Id = id });
+                if (product == null)
+                    return NotFound("Ürün bulunamadı,başka bir ID ile deneyin");
+                return View(product);
+            }
+        }
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var query = "delete from Products where ProductId=@Id";
+            using (var connection = _context.CreateConnection())
+            {
+                var result = await connection.ExecuteAsync(query, new { Id = id });
+                if (result > 0)
+                {
+                    ViewBag.Message("Silme İşlemi Başarılı");
+                }
+                else
+                {
+                    ViewBag.Message = "Silme İşleminde bir hata oluştu, lütfen tekrar deneyin.";
+                }
+                return View("DeleteResult");
+                    
             }
         }
     }

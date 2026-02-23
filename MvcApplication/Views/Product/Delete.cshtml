@@ -1,0 +1,26 @@
+﻿@model Product
+<h1>Delete Product</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Html.DisplayFor(model => model.ProductName)</td>
+            <td>@Html.DisplayFor(model => model.Price)</td>
+            <td>
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="ProductId" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div>
+    <a asp-action="Index" class="btn btn-sm btn-info mt-3">Back to product list</a>
+</div>
