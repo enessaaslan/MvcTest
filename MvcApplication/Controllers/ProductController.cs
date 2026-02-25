@@ -58,14 +58,14 @@ namespace MvcApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Product product)
         {
-            var query = "update Products set ProductName=@Name,Price=@Price,ProductDescription=@Description,PhoneId=@PhoneId where ProductId=@Id";
+            var query = "update Products set ProductName=@ProductName,Price=@Price,ProductDescription=@ProductDescription,PhoneId=@PhoneId where ProductId=@Id";
             using (var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, product);
                 return RedirectToAction("Index");
             }
         }
-
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var query = "Select * from Products where ProductId=@Id";
@@ -78,7 +78,7 @@ namespace MvcApplication.Controllers
             }
         }
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteMessage(int id)
         {
             var query = "delete from Products where ProductId=@Id";
             using (var connection = _context.CreateConnection())
@@ -90,10 +90,23 @@ namespace MvcApplication.Controllers
                 }
                 else
                 {
-                    ViewBag.Message = "Silme İşleminde bir hata oluştu, lütfen tekrar deneyin.";
+                    ViewBag.Message = ("Silme İşleminde bir hata oluştu, lütfen tekrar deneyin.");
                 }
                 return View("DeleteResult");
                     
+            }
+        }
+        public async Task<IActionResult> Details(int id)
+        {
+            var query="select * from Products p inner join PhoneCategories c on p.PhoneId=c.PhoneId where ProductId=@Id";
+            using (var connection = _context.CreateConnection())
+            {
+                var product = await connection.QuerySingleOrDefaultAsync<Product>(query, new { Id = id });
+                if (product == null)
+                {
+                    return NotFound("Ürün bulunamadı,başka bir ID ile deneyin");
+                }
+                return View(product);
             }
         }
     }
