@@ -58,7 +58,7 @@ namespace MvcApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Product product)
         {
-            var query = "update Products set ProductName=@ProductName,Price=@Price,ProductDescription=@ProductDescription,PhoneId=@PhoneId where ProductId=@Id";
+            var query = "update Products set ProductName=@ProductName,Price=@Price,ProductDescription=@ProductDescription,PhoneId=@PhoneId where ProductId=@ProductId";
             using (var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, product);
@@ -86,11 +86,11 @@ namespace MvcApplication.Controllers
                 var result = await connection.ExecuteAsync(query, new { Id = id });
                 if (result > 0)
                 {
-                    ViewBag.Message("Silme İşlemi Başarılı");
+                    ViewBag.Message= "Silme İşlemi Başarılı";
                 }
                 else
                 {
-                    ViewBag.Message = ("Silme İşleminde bir hata oluştu, lütfen tekrar deneyin.");
+                    ViewBag.Message = "Silme İşleminde bir hata oluştu, lütfen tekrar deneyin.";
                 }
                 return View("DeleteResult");
                     
